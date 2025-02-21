@@ -1,9 +1,12 @@
-<!DOCTYPE html>
-<html>
-<body>
+pipeline {
+    agent any
 
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
-
-</body>
-</html>
+    stages {
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '', reportFiles: 'simple.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+            }
+        }
+    }
+}
