@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS URL Shortener</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 40px;
+        background-color: #f5f5f5;
+      }
+      input {
+        width: 60%;
+        padding: 10px;
+        font-size: 1em;
+      }
+      button {
+        padding: 10px 15px;
+        font-size: 1em;
+        cursor: pointer;
+      }
+      #result {
+        margin-top: 20px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>🩵 Simple URL Shortener</h2>
+    <input id="longUrl" type="text" placeholder="Enter a long URL here" />
+    <button onclick="shorten()">Shorten</button>
+    <p id="result"></p>
+
+    <script>
+      const API_URL = "https://2y8vzwc2e5.execute-api.ap-south-1.amazonaws.com/prod";
+
+      async function shorten() {
+        const longUrl = document.getElementById("longUrl").value.trim();
+        if (!longUrl) {
+          alert("Please enter a URL");
+          return;
+        }
+
+        const response = await fetch(`${API_URL}/shorten`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ original_url: longUrl }),
+        });
+
+        if (!response.ok) {
+          document.getElementById("result").textContent = "Error creating short URL.";
+          return;
+        }
+
+        const data = await response.json();
+        document.getElementById("result").innerHTML = `
+          Short URL: <a href="${data.short_url}" target="_blank">${data.short_url}</a>
+        `;
+      }
+    </script>
+  </body>
+</html>
